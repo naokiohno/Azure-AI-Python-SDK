@@ -1,23 +1,33 @@
 
-# Python version: 3.12. Pip install requirements.txt to reproduce the code.
-# This script follows along this Azure Learn tutorial:
-# https://github.com/Azure/azureml-examples/blob/main/tutorials/azureml-getting-started/azureml-getting-started-studio.ipynb
+'''
+Python version used: 3.12. Pip install requirements.txt to reproduce the code.
+This script follows along this Azure Learn tutorial:
+https://github.com/Azure/azureml-examples/blob/main/tutorials/azureml-getting-started/azureml-getting-started-studio.ipynb
+
+IMPORTANT: The above tutorial assumes automatic authentication. Authentication will NOT work out of the box.
+Follow along this tutorial to create your AZURE_CLIENT_ID, CLIENT_SECRET, and TENANT_ID, and add them to your project as contributor:
+https://github.com/Azure/MachineLearningNotebooks/blob/master/how-to-use-azureml/manage-azureml-service/authentication-in-azureml/authentication-in-azureml.ipynb
+
+Finally, you must export the  variables you created in the tutorial to bashrc.
+AZURE_CLIENT_ID
+AZURE_CLIENT_SECRET
+AZURE_TENANT_ID
+
+In bash, do the following:
+
+nano ~/.bashrc
+export AZURE_CLIENT_ID='<your-client-id-here>'
+export AZURE_CLIENT_SECRET='<your_client_secret_here>'
+export AZURE_TENANT_ID='<your_tenant_id_here>'
+
+Then save the script. You can now reference your new environmental variables.
+'''
 
 # Import libraries -----------------------------------------------------------------------------------------------------
 from azure.ai.ml import MLClient
-from azure.identity import DefaultAzureCredential, InteractiveBrowserCredential
-import os
+from azure.identity import DefaultAzureCredential
 
-# Authenticate
-try:
-    credential = DefaultAzureCredential()
-    # Check if given credential can get token successfully.
-    credential.get_token("https://management.azure.com/.default")
-except Exception as ex:
-    # Fall back to InteractiveBrowserCredential in case DefaultAzureCredential not work
-    # This will open a browser page for
-    credential = InteractiveBrowserCredential()
-    credential.get_token("https://login.windows.net/299e1154-1e08-4ccd-a443-43c723a4f2f0")
+credential = DefaultAzureCredential()
 
 # Specify workspace
 ml_client = MLClient(
@@ -26,11 +36,15 @@ ml_client = MLClient(
     resource_group_name="Pay-as-you-go-resource-group",
     workspace_name="Pay-as-you-go-workspace")
 
+# Check successful authentication. If no error, you're good to go.
+ws = ml_client.workspaces.get("Pay-as-you-go-workspace")
+print(ws.location, ":", ws.resource_group)
 
 train_src_dir = "./src"
-os.makedirs(train_src_dir, exist_ok=True)
+# os.makedirs(train_src_dir, exist_ok=True)
 
 # Configure and run job ------------------------------------------------------------------------------------------------
+
 # import the libraries
 from azure.ai.ml import command
 from azure.ai.ml import Input
