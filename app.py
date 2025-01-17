@@ -7,6 +7,7 @@ https://github.com/Azure/azureml-examples/blob/main/tutorials/azureml-getting-st
 IMPORTANT: The above tutorial assumes automatic authentication. Authentication will NOT work out of the box.
 Follow along this tutorial to create your AZURE_CLIENT_ID, CLIENT_SECRET, and TENANT_ID, and add them to your project as contributor:
 https://github.com/Azure/MachineLearningNotebooks/blob/master/how-to-use-azureml/manage-azureml-service/authentication-in-azureml/authentication-in-azureml.ipynb
+Only follow the service principal authentication part - the rest is not relevant here.
 
 Finally, you must export the  variables you created in the tutorial to bashrc.
 AZURE_CLIENT_ID
